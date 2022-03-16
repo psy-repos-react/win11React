@@ -26,7 +26,8 @@ var apps = [{
 {
   name: 'Settings',
   icon: 'settings',
-  type: 'app'
+  type: 'app',
+  action: 'SETTINGS'
 },
 {
   name: 'File Explorer',
@@ -60,7 +61,7 @@ var apps = [{
 },
 {
   name: 'Blue',
-  icon: 'win/userDir',
+  icon: 'win/user',
   type: 'short'
 }, {
   name: 'Alarms',
@@ -85,12 +86,6 @@ var apps = [{
   action: 'CAMERA'
 },
 {
-  name: 'VS Code',
-  icon: 'code',
-  type: 'app',
-  action: 'VSCODE'
-},
-{
   name: 'Your Phone',
   icon: 'yphone',
   type: 'app'
@@ -103,7 +98,9 @@ var apps = [{
 {
   name: 'Get Started',
   icon: 'getstarted',
-  type: 'app'
+  type: 'app',
+  action: 'EXTERNAL',
+  payload: 'https://win11docs.asylum-os.com/'
 },
 {
   name: 'Groove Music',
@@ -113,7 +110,9 @@ var apps = [{
 {
   name: 'Help',
   icon: 'help',
-  type: 'app'
+  type: 'app',
+  action: 'EXTERNAL',
+  payload: 'https://win11docs.asylum-os.com/'
 },
 {
   name: 'Yammer',
@@ -193,12 +192,7 @@ var apps = [{
   icon: 'pinterest',
   type: 'app',
   action: 'EXTERNAL',
-  payload: 'https://pinterest.com/blue_edge'
-},
-{
-  name: 'PowerPoint',
-  icon: 'powerpoint',
-  type: 'app'
+  payload: 'https://www.pinterest.com/blueedgetechno/'
 },
 {
   name: 'Security',
@@ -267,11 +261,6 @@ var apps = [{
 {
   name: 'Weather',
   icon: 'weather',
-  type: 'app'
-},
-{
-  name: 'Word',
-  icon: 'winWord',
   type: 'app'
 },
 {

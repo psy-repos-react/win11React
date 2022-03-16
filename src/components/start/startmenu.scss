@@ -86,12 +86,22 @@ body[data-theme="dark"] .startMenu {
   height: calc(100% - 64px);
 
   &[data-allapps="false"] {
-    transition: ease-in-out 200ms;
+    opacity: 0;
+    transition: cubic-bezier(0, 0.58, 0.42, 1) 300ms;
   }
 
   &[data-allapps="true"] {
     transform: translateX(-640px);
-    transition: ease-in-out 200ms;
+    transition: cubic-bezier(0, 0.58, 0.42, 1) 300ms;
+  }
+}
+
+.stmenu {
+  &[data-allapps="false"] {
+    opacity: 1;
+  }
+  &[data-allapps="true"] {
+    opacity: 0;
   }
 }
 
@@ -119,7 +129,8 @@ body[data-theme="dark"] .startMenu {
 }
 
 .profile {
-  height: 2.5rem;
+  // height: 2.5rem;
+  padding: 0.6em 0.8em;
   display: flex;
   align-items: center;
   border-radius: 4px;
@@ -131,6 +142,7 @@ body[data-theme="dark"] .startMenu {
   .usName {
     margin-left: 12px;
     font-size: 0.7em;
+    font-weight: 500;
     color: var(--txt-col);
   }
 }
@@ -187,6 +199,10 @@ body[data-theme="dark"] .startMenu {
   }
 }
 
+.appCont .stAcbar {
+  padding-right: 64px;
+}
+
 .pnApps {
   min-height: 150px;
   padding: 20px 0;
@@ -207,17 +223,6 @@ body[data-theme="dark"] .startMenu {
 
     &:hover {
       background: var(--bg2);
-    }
-
-    &[value="true"] .pnIcon::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      width: 4px;
-      height: 4px;
-      border-radius: 6px;
-      background: var(--clrPrm);
     }
 
     .appName {
@@ -241,7 +246,6 @@ body[data-theme="dark"] .startMenu {
 .recApps {
   position: absolute;
   bottom: 0;
-  margin-top: 12px;
   overflow: auto;
   max-height: calc(100% - 332px);
 }
@@ -291,13 +295,14 @@ body[data-theme="dark"] .startMenu {
 .appCont {
   position: relative;
   padding: 32px;
+  padding-right: 0;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
 }
 
 .allApps {
-  margin-top: 14px;
+  margin-top: 16px;
   padding: 0 16px;
   height: 100%;
   overflow: auto;
@@ -308,22 +313,6 @@ body[data-theme="dark"] .startMenu {
     transform: scale(0);
     opacity: 0;
     pointer-events: none;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-    width: 1.6px;
-    background: transparent;
-  }
-
-  &:hover::-webkit-scrollbar {
-    display: block;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    width: 1.6px;
-    border-radius: 10px;
-    background: var(--sat-txt);
   }
 
   .allApp {

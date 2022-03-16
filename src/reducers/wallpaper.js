@@ -3,7 +3,7 @@ var locked = localStorage.getItem("locked");
 
 const walls = [
   "default/img0.jpg",
-  "default/img1.jpg",
+  "dark/img0.jpg",
   "ThemeA/img0.jpg",
   "ThemeA/img1.jpg",
   "ThemeA/img2.jpg",
@@ -22,7 +22,17 @@ const walls = [
   "ThemeD/img3.jpg",
 ]
 
+const themes = [
+  "default",
+  "dark",
+  "ThemeA",
+  "ThemeB",
+  "ThemeD",
+  "ThemeC",
+]
+
 const defState = {
+  themes: themes,
   wps: wps,
   src: walls[wps],
   locked: !(locked == 'false'),
@@ -64,9 +74,20 @@ const wallReducer = (state = defState, action) => {
           locked: true, act: 'shutdn'
       };
     case 'WALLSET':
+      var isIndex = !Number.isNaN(parseInt(action.payload)),
+          wps = 0, src = "";
+
+      if(isIndex){
+        wps = action.payload
+        src = walls[action.payload]
+      }else{
+        src = action.payload
+        wps = walls.indexOf(action.payload)
+      }
+
       return {
-        ...state, wps: action.payload,
-        src: walls[action.payload]
+        ...state, wps: wps,
+        src: src
       };
     default:
       return state

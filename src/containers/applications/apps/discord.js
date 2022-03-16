@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Icon, Image, ToolBar} from '../../../utils/general';
+import {Icon, Image, ToolBar, LazyComponent} from '../../../utils/general';
 
 import WidgetBot from '@widgetbot/react-embed';
 
@@ -45,28 +45,28 @@ export const DScord = ()=>{
           <div className="dsbar w-18">
             <div className="servCont noscroll">
               <Icon className="dsIcon" src="./img/asset/discord.png" ext width={26}
-                    click="EXTERNAL" payload="https://discord.gg/qmEZwUhb4b"/>
+                    click="EXTERNAL" payload="https://discord.gg/9jtcVZ3tWm"/>
               <hr/>
               <Icon className="wnServer svIcon" src="./img/asset/server.gif" width={48}
-                click="EXTERNAL" payload="https://discord.gg/qmEZwUhb4b" ext/>
-              {servers.map(server=>(
-                <Icon className="svIcon" src={"./img/asset/"+server.src}
+                click="EXTERNAL" payload="https://discord.gg/9jtcVZ3tWm" ext/>
+              {servers.map((server,i)=>(
+                <Icon key={i} className="svIcon" src={"./img/asset/"+server.src}
                   click="EXTERNAL" payload={server.link} ext width={48}/>
               ))}
             </div>
             <div className="joincont">
-              <a href="https://discord.gg/qmEZwUhb4b" target="_blank">
+              <a href="https://discord.gg/9jtcVZ3tWm" target="_blank">
                 Join
               </a>
             </div>
           </div>
           <div className="flex-grow overflow-hidden">
-            {wnapp.hide?null:(
+            <LazyComponent show={!wnapp.hide}>
               <WidgetBot
                 className="w-full h-full"
                 shard={url || ""}
               />
-            )}
+            </LazyComponent>
           </div>
         </div>
       </div>

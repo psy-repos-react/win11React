@@ -49,13 +49,19 @@
   // -webkit-backdrop-filter: blur(5px);
   // backdrop-filter: blur(5px);
   border-radius: 6px;
-  transition: all ease-in-out 200ms;
+  transition: all cubic-bezier(0.85, 0.14, 0.14, 0.85) 250ms;
   transform-origin: center;
   display: flex;
   flex-direction: column;
 
   &[data-size="full"] {
     border-radius: 0;
+
+    .closeBtn,
+    .toolbar,
+    .windowScreen {
+      border-radius: 0;
+    }
   }
 
   &[data-size="cstm"] {
@@ -101,17 +107,20 @@
   flex-grow: 1;
   overflow: hidden;
   border-radius: 0 0 6px 6px;
-
+  // overflow: hidden;
   &[data-dock="true"] {
     // height: calc(100% - 26px);
   }
+}
+
+.windowScreen.overflow-visible {
+  overflow: visible;
 }
 
 .overTool {
   position: absolute;
   top: 0;
   width: auto;
-  height: 26px;
 
   .btab {
     width: 176px;
@@ -141,6 +150,10 @@
   scroll-behavior: smooth;
 }
 
+.edgeBrowser .overTool {
+  height: 26px;
+}
+
 .addressBar {
   background: var(--bg1);
 
@@ -167,7 +180,8 @@
 }
 
 .cmdcont {
-  height: calc(100% - 24px);
+  position: absolute;
+  height: 100%;
 }
 
 .cmdLine {
@@ -175,6 +189,7 @@
   color: rgba(255, 255, 255, 0.72);
   font-family: "consolas", monospace;
   height: 1.2em;
+  margin: 0;
   font-weight: 400;
   overflow: hidden;
   max-width: 100%;
@@ -217,12 +232,12 @@
     }
   }
 }
-
 @keyframes blink {
   from,
   to {
     background: transparent;
   }
+
   50% {
     background: #ccc;
   }

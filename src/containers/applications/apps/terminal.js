@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {Icon, Image, ToolBar} from '../../../utils/general';
 
+import {Icon, Image, ToolBar} from '../../../utils/general';
 import dirs from './assets/dir.json';
 
 export const WnTerminal = ()=>{
@@ -36,7 +36,7 @@ export const WnTerminal = ()=>{
     }
   }
 
-  const cmdTool = (cmd)=>{
+  const cmdTool = async (cmd)=>{
     var tmpStack = [...stack];
     tmpStack.push(pwd+">"+cmd);
     var arr = cmd.split(" "),
@@ -49,6 +49,22 @@ export const WnTerminal = ()=>{
         tmpStack.push(arg);
       }else{
         tmpStack.push("ECHO is on.");
+      }
+    }
+    else if(type=="eval"){
+      if(arg.length) {
+        tmpStack.push(eval(arg).toString());
+      }
+    }else if(type=="python"){
+      if(arg.length) {
+        if(window.pythonRunner){
+          var content = await window.pythonRunner.runCode(arg);
+          if(window.pythonResult){
+            window.pythonResult.split("\n").forEach(x => {
+              if(x.trim().length) tmpStack.push(x)
+            });
+          }
+        }
       }
     }else if(type=="cd"){
       if(arg.length){
@@ -152,7 +168,7 @@ export const WnTerminal = ()=>{
     }else if (type=="systeminfo") {
       var dvInfo = [
         "Host Name:                 BLUE",
-        "OS Name:                   ",
+        "OS Name:                   Win11React Dummys Edition",
         "OS Version:                10.0.22000 N/A Build 22000.51",
         "OS Manufacturer:           ",
         "OS Configuration:          Standalone Workstation",
@@ -179,7 +195,9 @@ export const WnTerminal = ()=>{
         "TIME           Displays or sets the system time.",
         "TITLE          Sets the window title for a CMD.EXE session.",
         "TYPE           Displays the contents of a text file.",
-        "VER            Displays the Windows version."
+        "VER            Displays the Windows version.",
+        "PYTHON         EXECUTE PYTHON CODE.",
+        "EVAL           RUNS JavaScript statements."
       ];
 
       for (var i = 0; i < helpArr.length; i++) {
@@ -271,10 +289,10 @@ export const WnTerminal = ()=>{
         name={wntitle} invert bg="#060606"/>
       <div className="windowScreen flex" data-dock="true">
         <div className="restWindow h-full flex-grow text-gray-100">
-          <div className="cmdcont w-full box-border overflow-y-scroll thinScroll prtclk"
+          <div className="cmdcont w-full box-border overflow-y-scroll win11Scroll prtclk"
             id="cmdcont" onMouseOver={action} onClick={action} data-action="hover">
             <div className="w-full h-max pb-12">
-              {stack.map(x=> <div className="cmdLine">{x}</div>)}
+              {stack.map((x,i)=> <pre key={i} className="cmdLine">{x}</pre>)}
               <div className="cmdLine actmd">
                 {pwd}>
                 <div className="ipcmd" id="curcmd" contentEditable

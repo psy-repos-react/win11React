@@ -120,17 +120,15 @@ export const StartMenu = () => {
                     return app.empty ? (
                       <div key={i} className="pnApp pnEmpty"></div>
                     ) : (
-                      <div key={i} className="prtclk pnApp" value={app.action != null}
-                        onClick={clickDispatch} data-action={app.action}
-                        data-payload={app.payload || "full"}>
-                        <Icon className="pnIcon" src={app.icon} width={32}/>
+                      <div key={i} className="prtclk pnApp" value={app.action != null} onClick={clickDispatch} data-action={app.action} data-payload={app.payload || "full"}>
+                        <Icon className="pnIcon" src={app.icon} width={32} />
                         <div className="appName">{app.name}</div>
                       </div>
                     );
                   })}
                 </div>
               </div>
-              <div className="recApps">
+              <div className="recApps win11Scroll">
                 <div className="stAcbar">
                   <div className="gpname">Recommended</div>
                   <div className="gpbtn none">
@@ -141,7 +139,7 @@ export const StartMenu = () => {
                 <div className="reApps">
                   {start.rcApps.slice(0, 6).map((app, i) => {
                     return app.name ? (
-                      <div key={i} className="rnApp">
+                      <div key={i} className="rnApp" value={app.action != null} onClick={clickDispatch} data-action={app.action} data-payload={app.payload || "full"}>
                         <Icon className="pnIcon" src={app.icon} width={32} />
                         <div className="acInfo">
                           <div className="appName">{app.name}</div>
@@ -163,20 +161,20 @@ export const StartMenu = () => {
                   <div>Back</div>
                 </div>
               </div>
-              <div className="allApps" data-alpha={start.alpha}>
+              <div className="allApps win11Scroll" data-alpha={start.alpha}>
                 {start.contApps.map((ldx, i) => {
                   if (ldx.length == 0) return null;
 
                   var tpApps = [];
                   tpApps.push(
-                    <div className="allApp prtclk" data-action="STARTALPHA" onClick={clickDispatch} id={`char${i == 0 ? "#" : String.fromCharCode(i + 64)}`}>
+                    <div key={i} className="allApp prtclk" data-action="STARTALPHA" onClick={clickDispatch} id={`char${i == 0 ? "#" : String.fromCharCode(i + 64)}`}>
                       <div className="ltName">{i == 0 ? "#" : String.fromCharCode(i + 64)}</div>
                     </div>
                   );
 
                   ldx.forEach((app, j) => {
                     tpApps.push(
-                      <div key={j} className="allApp prtclk" onClick={clickDispatch} data-action={app.action} data-payload={app.payload || "full"}>
+                      <div key={app.name} className="allApp prtclk" onClick={clickDispatch} data-action={app.action} data-payload={app.payload || "full"}>
                         <Icon className="pnIcon" src={app.icon} width={24} />
                         <div className="appName">{app.name}</div>
                       </div>
@@ -193,7 +191,7 @@ export const StartMenu = () => {
                   </div>
                   {start.contApps.map((ldx, i) => {
                     return (
-                      <div className={ldx.length == 0 ? "dullApp allApp" : "allApp prtclk"} data-action="STARTALPHA" onClick={ldx.length == 0 ? null : clickDispatch} data-payload={i == 0 ? "#" : String.fromCharCode(i + 64)}>
+                      <div key={i} className={ldx.length == 0 ? "dullApp allApp" : "allApp prtclk"} data-action="STARTALPHA" onClick={ldx.length == 0 ? null : clickDispatch} data-payload={i == 0 ? "#" : String.fromCharCode(i + 64)}>
                         <div className="ltName">{i == 0 ? "#" : String.fromCharCode(i + 64)}</div>
                       </div>
                     );
@@ -237,7 +235,8 @@ export const StartMenu = () => {
               }}
               defaultValue={query}
               placeholder="Type here to search"
-              autoFocus/>
+              autoFocus
+            />
           </div>
           <div className="flex py-4 px-1 text-xs">
             <div className="opts w-1/2 flex justify-between">
@@ -260,7 +259,7 @@ export const StartMenu = () => {
           </div>
           <div className="shResult w-full flex justify-between">
             <div className="leftSide flex-col px-1" data-width={query.length != 0}>
-              <div className="text-xss font-semibold mb-4">{query.length ? "Best match" : "Top apps"}</div>
+              <div className="text-sm font-semibold mb-4">{query.length ? "Best match" : "Top apps"}</div>
               {query.length ? (
                 <div className="textResult h-16">
                   <div className="smatch flex my-2 p-3 rounded">
@@ -281,22 +280,22 @@ export const StartMenu = () => {
               ) : (
                 <>
                   <div className="topApps flex w-full justify-between">
-                    {start.rcApps.slice(2, 7).map((app, i) => {
+                    {start.rcApps.slice(1, 7).map((app, i) => {
                       return (
-                        <div className="topApp pt-4 py-2 ltShad">
-                          <Icon onClick={clickDispatch} click={app.action} payload={app.payload || "full"} src={app.icon} width={24} />
+                        <div key={i} className="topApp pt-6 py-4 ltShad">
+                          <Icon onClick={clickDispatch} click={app.action} payload={app.payload || "full"} src={app.icon} width={30} />
                           <div className="text-xs mt-2">{app.name}</div>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="text-xss font-semibold mt-8">Quick Searches</div>
-                  <div className="quickSearches pl-4 mt-2">
-                    {start.qksrch.map((srch) => {
+                  <div className="text-sm font-semibold mt-8">Quick Searches</div>
+                  <div className="quickSearches mt-2">
+                    {start.qksrch.map((srch,i) => {
                       return (
-                        <div className="qksrch flex items-center py-3 handcr prtclk" onClick={clickDispatch} data-action="EDGELINK" data-payload={srch[2]}>
+                        <div key={i} className="qksrch flex items-center p-3 my-1 handcr prtclk" onClick={clickDispatch} data-action="EDGELINK" data-payload={srch[2]}>
                           <Icon fafa={srch[0]} reg={srch[1]} />
-                          <div className="ml-4 text-xs">{srch[2]}</div>
+                          <div className="ml-4 text-sm">{srch[2]}</div>
                         </div>
                       );
                     })}

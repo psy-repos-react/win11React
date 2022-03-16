@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "../../utils/general";
 import "./startmenu.scss";
-import "./sidepane.scss";
 import "./searchpane.scss";
-import Battery from "../taskbar/Battery";
+import "./sidepane.scss";
+import Battery from "../Battery";
 
 import axios from "axios";
 
@@ -64,18 +64,15 @@ export const SidePane = () => {
   const setting = useSelector((state) => state.setting);
   const tasks = useSelector((state) => state.taskbar);
   const [pnstates, setPnstate] = useState([]);
+  const [batterylevel, setbatterylevel] = useState(100);
   const dispatch = useDispatch();
 
-  const [batterylevel, setbatterylevel] = useState(100);
-
   const changebatterystatus = (bt) => {
-    let level = bt.level * 100;
+    let level = bt.level * 100 || 100;
 
     if (bt.charging) {
-      setbatterylevel("*");
+      setbatterylevel(-level);
     } else {
-      if (level <= 10) level += 10;
-      else if (level >= 80) level -= 10;
       setbatterylevel(level);
     }
   };
@@ -114,8 +111,8 @@ export const SidePane = () => {
     }
   };
 
-  let vSlider = document.querySelector(".vSlider");
-  let bSlider = document.querySelector(".bSlider");
+  const vSlider = document.querySelector(".vSlider");
+  const bSlider = document.querySelector(".bSlider");
 
   const setVolume = (e) => {
     var aud = 3;
@@ -168,11 +165,11 @@ export const SidePane = () => {
 
   return (
     <div className="sidePane dpShad" data-hide={sidepane.hide} style={{ "--prefix": "PANE" }}>
-      <div className="quickSettings">
-        <div className="quickCont">
+      <div className="quickSettings p-5 pb-8">
+        <div className="qkCont">
           {sidepane.quicks.map((qk, idx) => {
             return (
-              <div className="actionCenter">
+              <div key={idx} className="qkGrp">
                 <div className="qkbtn handcr prtclk" onClick={clickDispatch} data-action={qk.action} data-payload={qk.payload || qk.state} data-state={pnstates[idx]}>
                   <Icon className="quickIcon" ui={qk.ui} src={qk.src} width={14} invert={pnstates[idx] ? true : null} />
                 </div>
@@ -190,10 +187,10 @@ export const SidePane = () => {
           <input className="sliders vSlider" onChange={setVolume} type="range" min="0" max="100" defaultValue="100" />
         </div>
       </div>
-      <div className="mt-4 p-1 bottomBar">
-        <div className="px-2 bettery">
-          <Battery level={batterylevel} charging={batterylevel === "*" ? true : false} />
-          <div className="text-xs">{`${batterylevel}%`}</div>
+      <div className="p-1 bottomBar">
+        <div className="px-3 bettery">
+          <Battery level={Math.abs(batterylevel)} charging={batterylevel < 0} />
+          <div className="text-xs">{`${Math.round(Math.abs(batterylevel))}%`}</div>
         </div>
       </div>
     </div>
@@ -220,15 +217,7 @@ export const CalnWid = () => {
 
   return (
     <div className="calnpane dpShad" data-hide={sidepane.calhide} style={{ "--prefix": "CALN" }}>
-      <div className="topBar">
-        <div className="ml-4 text-sm">
-          {new Date().toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-          })}
-        </div>
-      </div>
+      <div className="topBar pl-4 text-sm">{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</div>
       <div id="dycalendar"></div>
     </div>
   );

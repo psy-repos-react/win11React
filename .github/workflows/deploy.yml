@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
   workflow_dispatch:     
 
 jobs:
@@ -17,36 +14,41 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+      
+    - name: Setup Sentry CLI
+      uses: mathieu-bour/setup-sentry-cli@1.2.0
+      with:
+        version: latest # optional if 'latest'
+        token: ${{ secrets.SENTRY_AUTH_TOKEN }} # from GitHub secrets
+        organization: ${{ secrets.SENTRY_ORG }}
+        project: ${{ secrets.SENTRY_PROJECT }}
+     
+    - run: sentry-cli releases new -p ${{ secrets.SENTRY_PROJECT }} ${{ github.sha }}
+     
+    - run: sentry-cli releases set-commits --auto ${{ github.sha }}
+          
 
-    - name: Install Node.js
+    - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
         node-version: '16.6.1'
 
-    - name: Install NPM packages
-      run: npm ci
+    - name: Cache Node.js modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.OS }}-noder-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+          ${{ runner.OS }}-
+
+    - name: Install dependencies
+      run: CI=false npm install
 
     - name: Build project
       run: CI=false npm run build
-
-    - name: Upload production-ready build files
-      uses: actions/upload-artifact@v2
-      with:
-        name: production-files
-        path: ./build
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: production-files
-        path: ./build
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
@@ -54,3 +56,5 @@ jobs:
         github_token: ${{ secrets.BOT }}
         cname: win11.blueedge.me
         publish_dir: ./build
+        
+

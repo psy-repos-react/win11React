@@ -7,6 +7,19 @@ import * as FaIcons from '@fortawesome/free-solid-svg-icons';
 import * as FaRegIcons from '@fortawesome/free-regular-svg-icons';
 import * as AllIcons from './icons.js';
 
+String.prototype.strip = function (c) {
+  var i = 0, j = this.length-1;
+  while (this[i] === c) i++;
+  while (this[j] === c) j--;
+  return this.slice(i,j+1);
+}
+
+String.prototype.count = function(c) {
+  var result = 0, i = 0;
+  for(i;i<this.length;i++) if(this[i]==c) result++;
+  return result;
+};
+
 export const Icon = (props)=>{
   const dispatch = useDispatch();
   var src = `/img/icon/${props.ui!=null?'ui/':''}${props.src}.png`;
@@ -87,22 +100,46 @@ export const Icon = (props)=>{
   }else{
     return (
       <div className={`uicon ${props.className||""} ${prtclk}`}
-        data-open={props.open!=null} data-action={props.click}
+        data-open={props.open} data-action={props.click}
         data-active={props.active} data-payload={props.payload}
         onClick={props.onClick || (props.pr && clickDispatch) || null}
-        data-menu={props.menu} data-pr={props.pr!=null}>
+        data-menu={props.menu} data-pr={props.pr}>
+          {props.className=='tsIcon'?
+            <div
+            onClick={props.click!=null?clickDispatch:null}
+            style={{width:props.width,height:props.width}}
+            data-action={props.click}
+            data-payload={props.payload}
+            data-click={props.click!=null}
+            data-flip={props.flip!=null}
+            data-invert={props.invert!=null?'true':'false'}
+            data-rounded={props.rounded!=null?'true':'false'}
+          >
           <img
             width={props.width} height={props.height}
             data-action={props.click}
             data-payload={props.payload}
             data-click={props.click!=null}
+            data-flip={props.flip!=null}
+            data-invert={props.invert!=null?'true':'false'}
+            data-rounded={props.rounded!=null?'true':'false'}
+            src={src} style={{
+              margin: props.margin || null
+            }} alt=""/></div>                 
+            :
+            <img
+            width={props.width} height={props.height}
             onClick={props.click!=null?clickDispatch:null}
+            data-action={props.click}
+            data-payload={props.payload}
+            data-click={props.click!=null}
             data-flip={props.flip!=null}
             data-invert={props.invert!=null?'true':'false'}
             data-rounded={props.rounded!=null?'true':'false'}
             src={src} style={{
               margin: props.margin || null
             }} alt=""/>
+        }
       </div>
     );
   }
@@ -116,7 +153,9 @@ export const Image = (props)=>{
   }
 
   const errorHandler = (e)=>{
-    e.target.src = props.err
+    if(props.err){
+      e.target.src = props.err
+    }
   }
 
   const clickDispatch = (event)=>{
@@ -140,6 +179,7 @@ export const Image = (props)=>{
           height={props.h}
           data-free={props.free!=null}
           data-var={props.var}
+          loading={props.lazy?"lazy":null}
           src={src} alt="" onError={errorHandler}/>:null}
     </div>
   )
@@ -175,13 +215,13 @@ export const SnapScreen = (props)=>{
     }
   })
 
-  return props.snap?(
+  return props.snap || delay?(
     <div className="snapcont mdShad" data-dark={props.invert!=null}>
-      {lays.map(x=>{
+      {lays.map((x,i)=>{
         return (
-          <div className="snapLay">
-            {x.map(y=>(
-              <div className="snapper" style={{
+          <div key={i} className="snapLay">
+            {x.map((y,j)=>(
+              <div key={j} className="snapper" style={{
                 borderTopLeftRadius: (y.br%2==0)*4,
                 borderTopRightRadius: (y.br%3==0)*4,
                 borderBottomRightRadius: (y.br%5==0)*4,
@@ -266,12 +306,10 @@ export const ToolBar = (props)=>{
         dim0 = dimP[0] + vec[0]*(e.clientY - posM[0]),
         dim1 = dimP[1] + vec[1]*(e.clientX - posM[1])
 
-    // console.log("Dragging");
-    // console.log(dim0, dim01);
     if(op==0) setPos(pos0, pos1)
     else{
-      dim0 = Math.max(dim0, 360)
-      dim1 = Math.max(dim1, 360)
+      dim0 = Math.max(dim0, 320)
+      dim1 = Math.max(dim1, 320)
       pos0 = posP[0] + Math.min(vec[0],0)*(dim0 - dimP[0])
       pos1 = posP[1] + Math.min(vec[1],0)*(dim1 - dimP[1])
       setPos(pos0, pos1)
@@ -323,7 +361,7 @@ export const ToolBar = (props)=>{
               snap={snap} closeSnap={closeSnap}/>
             {/* {snap?<SnapScreen app={props.app} closeSnap={closeSnap}/>:null} */}
           </div>
-          <Icon invert={props.invert} click={props.app}
+          <Icon className="closeBtn" invert={props.invert} click={props.app}
             payload="close" pr src="close" ui width={8}/>
         </div>
       </div>
@@ -359,4 +397,18 @@ export const ToolBar = (props)=>{
       </div>
     </>
   );
+}
+
+export const LazyComponent = ({show, children})=>{
+  const [loaded, setLoad] = useState(false)
+
+  useEffect(()=>{
+    if(show && !loaded) setLoad(true)
+  }, [show])
+
+  return show || loaded?(
+    <>
+      {children}
+    </>
+  ):null
 }

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "../../utils/general";
-import Battery from "./Battery";
+import Battery from "../Battery";
 import "./taskbar.scss";
 
 const Taskbar = () => {
-  const tasks = useSelector((state) => state.taskbar);
+  const tasks = useSelector((state) =>{
+    //console.log(state)
+    return state.taskbar
+  });
   const apps = useSelector((state) => {
     var tmpApps = { ...state.apps };
     for (var i = 0; i < state.taskbar.apps.length; i++) {
@@ -52,13 +55,11 @@ const Taskbar = () => {
   };
 
   const changebatterystatus = (bt) => {
-    let level = bt.level * 100;
+    let level = bt.level * 100 || 100;
 
     if (bt.charging) {
-      setbatterylevel("*");
+      setbatterylevel(-level);
     } else {
-      if (level <= 10) level += 10;
-      else if (level >= 80) level -= 10;
       setbatterylevel(level);
     }
   };
@@ -91,13 +92,13 @@ const Taskbar = () => {
           <div className="tsbar" onMouseOut={hidePrev}>
             <Icon className="tsIcon" src="home" width={24} click="STARTOGG" />
             {tasks.search ? <Icon className="tsIcon searchIcon" src="search" width={24} click="STARTSRC" /> : null}
-            {tasks.widgets ? <Icon className="tsIcon" src="widget" width={24} click="WIDGTOGG" /> : null}
+            {tasks.widgets ? <Icon className="tsIcon widget" src="widget" width={24} click="WIDGTOGG" /> : null}
             {tasks.apps.map((task, i) => {
               var isHidden = apps[task.icon].hide;
               var isActive = apps[task.icon].z == apps.hz;
               return (
-                <div onMouseOver={(!isActive && !isHidden && showPrev) || null} value={task.icon}>
-                  <Icon key={i} className="tsIcon" width={24} open={isHidden ? null : true} click={task.action} active={isActive} payload="togg" src={task.icon} />
+                <div key={i} onMouseOver={(!isActive && !isHidden && showPrev) || null} value={task.icon}>
+                  <Icon  className="tsIcon" width={24} open={isHidden ? null : true} click={task.action} active={isActive} payload="togg" src={task.icon} />
                 </div>
               );
             })}
@@ -105,10 +106,9 @@ const Taskbar = () => {
               if (key != "hz") {
                 var isActive = apps[key].z == apps.hz;
               }
-
-              return key != "hz" && !apps[key].task && !apps[key].hide ? (
-                <div onMouseOver={(!isActive && showPrev) || null} value={apps[key].icon}>
-                  <Icon key={i} className="tsIcon" width={24} active={isActive} click={apps[key].action} payload="togg" open="true" src={apps[key].icon} />
+              return key != "hz"&& key != "undefined"&& !apps[key].task && !apps[key].hide ? (
+                <div key={i} onMouseOver={(!isActive && showPrev) || null} value={apps[key].icon}>
+                  <Icon className="tsIcon" width={24} active={isActive} click={apps[key].action} payload="togg" open="true" src={apps[key].icon} />
                 </div>
               ) : null;
             })}
@@ -120,7 +120,7 @@ const Taskbar = () => {
           <div className="prtclk handcr my-1 px-1 hvlight flex rounded" onClick={clickDispatch} data-action="PANETOGG">
             <Icon className="taskIcon" src="wifi" ui width={16} />
             <Icon className="taskIcon" src={"audio" + tasks.audio} ui width={16} />
-            <Battery level={batterylevel} charging={batterylevel === "*" ? true : false} />
+            <Battery level={Math.abs(batterylevel)} charging={batterylevel < 0} />
           </div>
 
           <div className="taskDate m-1 handcr prtclk rounded hvlight" onClick={clickDispatch} data-action="CALNTOGG">

@@ -52,7 +52,9 @@ export const BootScreen = (props) => {
       <div className={blackout ? "hidden" : ""}>
         <Image src="asset/bootlogo" w={180} />
         <div className="mt-48" id="loader">
-          <img src="img\asset\loader.gif" alt="loading" width={100}/>
+          <svg className="progressRing" height={48} width={48} viewBox="0 0 16 16">
+            <circle cx="8px" cy="8px" r="7px"></circle>
+          </svg>
         </div>
       </div>
     </div>
@@ -119,7 +121,7 @@ export const LockScreen = (props) => {
           })}
         </div>
         <div className="text-lg font-medium text-gray-200">
-          {new Date().toLocaleDateString("en-US", {
+          {new Date().toLocaleDateString(undefined, {
             weekday: "long",
             month: "long",
             day: "numeric",

@@ -2,8 +2,9 @@
 
 [![Follow me](https://img.shields.io/github/followers/blueedgetechno?label=follow%20me&style=social)](https://github.com/blueedgetechno)
 [![Follow Twitter](https://img.shields.io/twitter/follow/blueedgetechno?label=Follow%20me&style=social)](https://twitter.com/blueedgetechno)
-[![Join](https://img.shields.io/discord/868499076432408627.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/qmEZwUhb4b)
+[![Join](https://img.shields.io/discord/868499076432408627.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/9jtcVZ3tWm)
 [![Build](https://github.com/blueedgetechno/win11React/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/blueedgetechno/win11React/actions/workflows/deploy.yml)
+![Uptime](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/win11react/status/master/api/win11-react/uptime.json)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/blueedgetechno)
 
@@ -15,18 +16,19 @@ This open source project is made in the hope to replicate the Windows 11 desktop
 
 **THIS IS NOT THE APP STORE REPO**
 
-[App Store](https://github.com/win11bot/win11bot)
+[App Store](https://github.com/win11react/store)
 
  #### Live Experience🌈: [win11.blueedge.me](https://win11.blueedge.me)
 
 ![home](./public/img/home.jpg)
 
 # Gallery
-![pic1](./public/img/gallery1.jpg)
+
+![image](https://user-images.githubusercontent.com/89068816/154832868-6ec81a0b-0bc3-4e77-a4bf-3391b852fe9c.png)
 
 ![pic1](./public/img/gallery2.jpg)
 
-![pic1](./public/img/gallery3.jpg)
+![image](https://user-images.githubusercontent.com/89068816/154832942-b3e435dd-5fe4-4bc1-a9be-34262698625d.png)
 
 # Why
 
@@ -39,7 +41,7 @@ WHY NOT? Why not just waste a week of your life creating a React project, just t
 - [x] Snap windows in different layouts
 - [x] Browser, Store, Terminal, Calculator
 - [x] Notepad, Vscode, Whiteboard
-- [ ] File Explorer + Setting
+- [x] File Explorer + Setting
 - [x] Drag and Resize windows
 - [x] Startup and Lock screen
 - [x] Themes and Background
@@ -58,7 +60,7 @@ WHY NOT? Why not just waste a week of your life creating a React project, just t
 - Is this the full operating system?
   - No, This is not a full operating system and It is also not affiliated by Microsoft in anyway.
 
-- How long it took?
+- How long did it take? 
   - Honestly It took 2-3 days collecting assets, 2-3 planning and about 6 days programming it.
 
 
@@ -103,21 +105,6 @@ You can find a compiled `.exe` in the **Releases** section or via clicking [HERE
 If you have one of the latest windows builds then you can enter the command below in **CMD**
 
 ``` winget install blueedge.win11react ```
-
------------------------------------------
-
-**APT/DEBIAN/UBUNTU**
-
-AMD64 ONLY
-
-``` curl -s --compressed "https://projects.asylum-os.com/apt/KEY.gpg" | sudo apt-key add - ```
-
-``` sudo curl -s --compressed -o /etc/apt/sources.list.d/asylum.list "https://projects.asylum-os.com/apt/apt.list" ```
-
-``` sudo apt update ```
-
-``` sudo apt install win11in-react ```
-
 
 
 ## Online Deployment

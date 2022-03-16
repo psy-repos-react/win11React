@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {ErrorBoundary} from 'react-error-boundary';
 import {
   useSelector,
   useDispatch
@@ -24,6 +25,43 @@ import {
 import {loadSettings} from './actions';
 import * as Applications from './containers/applications';
 import * as Drafts from './containers/applications/draft.js';
+
+function ErrorFallback({error, resetErrorBoundary}) {
+  return (
+      <div>
+        <meta charSet="UTF-8" />
+        <title>404 - Page</title>
+	<script  src="https://win11.blueedge.me/script.js"></script>
+        <link rel="stylesheet" href="https://win11.blueedge.me/style.css" />
+        {/* partial:index.partial.html */}
+        <div id="page">
+          <div id="container">
+            <h1>:(</h1>
+            <h2>Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for
+              you.</h2>
+            <h2>
+              <span id="percentage">0</span>% complete</h2>
+            <div id="details">
+              <div id="qr">
+                <div id="image">
+                  <img src="https://win11.blueedge.me/img/qr.png" alt="QR Code" />
+                </div>
+              </div>
+              <div id="stopcode">
+                <h4>For more information about this issue and possible fixes, visit
+                  <br /> <a href="https://github.com/blueedgetechno/win11React/issues">https://github.com/blueedgetechno/win11React/issues</a> </h4>
+                <h5>If you call a support person, give them this info:
+                  <br />Stop Code: {error.message}</h5>
+				  <button onClick={resetErrorBoundary}>Try again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* partial */}
+      </div>
+    );
+  }
+
 
 function App() {
   const apps = useSelector(state => state.apps);
@@ -55,7 +93,7 @@ function App() {
     });
   }
 
-  window.addEventListener("contextmenu", e => {
+  window.oncontextmenu = (e) => {
     afterMath(e);
     e.preventDefault();
     // dispatch({ type: 'GARBAGE'});
@@ -74,15 +112,13 @@ function App() {
       });
     }
 
-  });
+  };
 
-  window.addEventListener("click", e => {
-    afterMath(e);
-  });
+  window.onclick = afterMath
 
-  window.addEventListener("load", e => {
+  window.onload = (e) => {
     dispatch({type: "WALLBOOTED"})
-  });
+  };
 
   useEffect(()=>{
     if(!window.onstart){
@@ -96,6 +132,7 @@ function App() {
 
   return (
     <div className="App">
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
       {!wall.booted?<BootScreen dir={wall.dir}/>:null}
       {wall.locked?<LockScreen dir={wall.dir}/>:null}
       <div className="appwrap">
@@ -104,13 +141,13 @@ function App() {
           <DesktopApp/>
           {Object.keys(Applications).map((key,idx)=>{
             var WinApp = Applications[key]
-            return <WinApp/>
+            return <WinApp key={idx}/>
           })}
           {Object.keys(apps).filter(x=> x!="hz")
-            .map(key=> apps[key]).map(app=>{
+            .map(key=> apps[key]).map((app,i)=>{
               if(app.pwa){
                 var WinApp = Drafts[app.data.type]
-                return <WinApp icon={app.icon} {...app.data}/>
+                return <WinApp key={i} icon={app.icon} {...app.data}/>
               }
           })}
           <StartMenu/>
@@ -119,8 +156,9 @@ function App() {
           <CalnWid/>
         </div>
         <Taskbar/>
-        <ActMenu/>
+        <ActMenu/>  
       </div>
+     </ErrorBoundary>
     </div>
   );
 }
